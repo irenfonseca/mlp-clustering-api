@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 
 const modelDir = path.resolve(__dirname, 'model');
+const { pathToFileURL } = require('url');
 app.use('/model', express.static(modelDir));
 
 let model = null;   // GraphModel
@@ -19,8 +20,8 @@ let outputName = null;
 const PORT = process.env.PORT || 3000;
 
 function wasmFileDirUrl() {
-  const dist = path.join(__dirname, 'node_modules', '@tensorflow', 'tfjs-backend-wasm', 'dist');
-  return 'file://' + dist.replace(/\\/g, '/') + '/';
+const distFsPath = path.join(__dirname, 'node_modules', '@tensorflow', 'tfjs-backend-wasm', 'dist');
+return pathToFileURL(distFsPath + path.sep).href; // 'file:///.../dist/'
 }
 
 app.listen(PORT, async () => {
